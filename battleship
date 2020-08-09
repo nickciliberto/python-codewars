@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar  8 20:21:16 2020
+
+@author: nicholas
+"""
+
+def damaged_or_sunk (board, attacks):
+    result = {'sunk': 0, 'damaged': 0, 'not_touched': 0, 'points': 0}
+    boat_1_len_start = 0
+    boat_2_len_start = 0
+    boat_3_len_start = 0
+    for line in board:
+        for num in line:
+            if num == 1:
+                boat_1_len_start += 1
+            elif num == 2:
+                boat_2_len_start += 1
+            elif num == 3:
+                boat_3_len_start += 1
+    for attack in attacks:
+        board[-attack[1]][attack[0]-1] = 0
+    boat_1_len_end = 0
+    boat_2_len_end = 0
+    boat_3_len_end = 0
+    for line in board:
+        for num in line:
+            if num == 1:
+                boat_1_len_end += 1
+            elif num == 2:
+                boat_2_len_end += 1
+            elif num == 3:
+                boat_3_len_end += 1
+    if boat_1_len_start == 0:
+        pass
+    elif boat_1_len_end == 0 and boat_1_len_start != 0:
+        result['sunk'] += 1
+    elif boat_1_len_end == boat_1_len_start:
+        result['not_touched'] += 1
+    else:
+        result['damaged'] += 1
+    if boat_2_len_start == 0:
+        pass
+    elif boat_2_len_end == 0 and boat_2_len_start != 0:
+        result['sunk'] += 1
+    elif boat_2_len_end == boat_2_len_start:
+        result['not_touched'] += 1
+    else:
+        result['damaged'] += 1
+    if boat_3_len_start == 0:
+        pass
+    elif boat_3_len_end == 0 and boat_3_len_start != 0:
+        result['sunk'] += 1
+    elif boat_3_len_end == boat_3_len_start:
+        result['not_touched'] += 1
+    else:
+        result['damaged'] += 1
+    result['points'] = result['sunk'] - result['not_touched'] + result['damaged']/2
+    if (result['points']*2) % 2 == 0:
+        result['points'] = int(result['points'])
+    return result
+    
+board1 = [ [0, 0, 1, 0],
+          [0, 0, 1, 0],
+          [0, 0, 1, 0] ]
+
+attacks1 = [[3, 1], [3, 2], [3, 3]];
+
+
+board2 = [ [3, 0, 1],
+          [3, 0, 1],
+          [0, 2, 1], 
+          [0, 2, 0] ]
+
+attacks2 = [[2, 1], [2, 2], [ 3, 2], [3, 3]]
+
+print(damaged_or_sunk (board1, attacks1))
+print(damaged_or_sunk (board2, attacks2))
